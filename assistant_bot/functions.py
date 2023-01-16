@@ -1,5 +1,6 @@
 from addressbook import AddressBook
 from input_error import input_error
+from new_interface import Interface
 from record import Record
 from exc import NoUserError, NoteExistError
 import cleaner
@@ -11,24 +12,29 @@ import cleaner
 
 def parser(user_input):
     parsed_input = user_input.lower().strip().split()
-    return handler(parsed_input)
+    return parsed_input
+#   return handler(parsed_input)
 
 
-@input_error
-def handler(parsed_input):
-    if parsed_input[0] in commands_dict:
-        if len(parsed_input) == 1:
-            action = commands_dict.get(parsed_input[0])()
-        else:
-            action = commands_dict.get(parsed_input[0])(
-                (" ").join(parsed_input[1:]))
-    else:
-        raise KeyError
-    return action
+# @input_error
+# def handler(parsed_input):
+#     if parsed_input[0] in commands_dict:
+#         if len(parsed_input) == 1:
+#             action = commands_dict.get(parsed_input[0])()
+#         else:
+#             action = commands_dict.get(parsed_input[0])(
+#                 (" ").join(parsed_input[1:]))
+#     else:
+#         raise KeyError
+#     return action
 
 
 def hello():
     return f"How can I help you? Enter: 'help' for manual"
+
+
+def hello_ua():
+    return f"Питання? Введіть: 'що' для допомоги"
 
 
 def add(string):
@@ -293,6 +299,37 @@ def manual():
     '''
 
 
+def manual_ua():
+    return '''Введіть одну з цих команд:
+    >>що,
+    >>додати_контакт 'ім'я' 'номер (3 оператор та 7 цифр)',
+    >>додати_номер 'ім'я' 'номер (3 оператор та 7 цифр)',
+    >>додати_нотаток: 'імя' 'текст' '#тег' '#тег'...
+    >>пошук 'ім'я' або 'частина інфо',
+    >>зміна 'ім'я' 'phone'  'нове значення', 
+                  'note' 'починаєтся з.. - спрацює якщо є тільки одне співпадання'  
+                          '->' 'новий текст' (тег збережется)
+                  'birthday' 'нове значення',
+                  'email' 'нове значення',
+                  'address' 'нове значення'   
+    >>видалити_інфо 'ім'я' 'phone' 'value',
+                         'note' 'починаєтся з.. - спрацює якщо є тільки одне співпадання'
+                         'notes' 'all'  - видалить всі нотатки контакту
+                         'birthday' 
+                         'email' 
+                         'address' 
+
+    >>видалити_контакт 'ім'я',
+    >>днів_до_др 'ім'я',
+    >>знайти_тег 'тег'
+    >>знайти_текст 'текст'
+    >>список_др 'кількість днів',
+    >>все (виведе список контактів),
+    >>порядок, 'шлях до теки' (повний шлях до теки що потрібно упорядкувати),
+    >>удачі, >>вихід, >>закрити
+    '''
+
+
 commands_dict = {"hello": hello,
                  "help": manual,
                  "add_contact": add,
@@ -310,4 +347,24 @@ commands_dict = {"hello": hello,
                  "sort": sort_files,
                  "exit": stop}
 
+commands_dict_ua = {"hello": hello_ua,
+                 "що": manual_ua,
+                 "додати_контакт": add,
+                 "додати_номер": add_phone,
+                 "додати_нотаток": add_note,
+                 "зміна": change_attr,
+                 "пошук": search,
+                 "видалити_інфо": delete_attribute,
+                 "видалити_контакт": delete_contact,
+                 "днів_до_др": days_to_birthday,
+                 "знайти_тег": find_tag,
+                 "знайти_текст": find_text,
+                 "список_др": birthday_list,
+                 "все": show_all,
+                 "порядок": sort_files,
+                 "exit": stop}
+
+
+
+interface = Interface()
 users = AddressBook()

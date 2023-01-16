@@ -1,11 +1,6 @@
-from functions import commands_dict, parser, users, hello
+from functions import commands_dict,commands_dict_ua, interface, users, hello, hello_ua
 import addressbook
 import console
-
-# from addressbook import *
-# from functions import *
-# from assistant_bot.addressbook import *
-# from assistant_bot.functions import *
 
 
 the_end = False
@@ -13,15 +8,22 @@ the_end = False
 
 def main():
     try:
-        print(hello())
+        lang = input("Change language to Ukrainian? Enter 'Yes' to change")
+        if lang.strip().lower() == 'yes':
+            print(hello_ua())
+            command = commands_dict_ua
+        else:
+            print(hello())
+            command = commands_dict
+
         while not the_end:
-            #user_input = input("Enter please: ").lower()
-            user_input = console.get_input("Enter please: ").lower()
-            if user_input in ["good_bye", "close", "exit"]:
+            user_input = input(">>>: ").lower()
+#           user_input = console.get_input("Enter please: ").lower()
+            if user_input in ["good_bye", "close", "exit", "удачі", "вихід", "закрити"]:
                 print(commands_dict.get("exit")())
                 break
             else:
-                print(parser(user_input))
+                print(interface.handler(command, user_input))
     finally:
         users.save_file()
 
